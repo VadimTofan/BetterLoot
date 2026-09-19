@@ -1,0 +1,12 @@
+## Interface: 120100
+## Title: BetterLoot
+## Notes: Compact standalone group-loot roll frames.
+## Author: Vadim
+## Version: 0.1.0
+## SavedVariables: BetterLootDB
+
+RollState.lua
+RollView.lua
+RollController.lua
+Position.lua
+Core.lua
