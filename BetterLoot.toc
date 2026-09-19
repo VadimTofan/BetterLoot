@@ -2,7 +2,9 @@
 ## Title: BetterLoot
 ## Notes: Compact standalone group-loot roll frames.
 ## Author: Vadim
-## Version: 0.1.0
+## Version: v0.1.0
+## X-Curse-Project-ID: 1702651
+## IconTexture: Interface\AddOns\BetterLoot\Media\BetterLoot
 ## SavedVariables: BetterLootDB
 
 RollState.lua

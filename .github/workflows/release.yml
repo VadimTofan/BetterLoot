@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Lua 5.1
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes lua5.1
+
+      - name: Test addon logic
+        run: lua5.1 Tests/run.lua
+
+      - name: Check source Lua syntax
+        run: >-
+          luac5.1 -p Core.lua Position.lua RollController.lua RollState.lua
+          RollView.lua
+
+      - name: Build package without publishing
+        uses: BigWigsMods/packager@v2
+        with:
+          args: -d
+
+      - name: Validate package contents
+        shell: pwsh
+        run: >-
+          Tests/Validate-Package.ps1
+          -ReleaseDirectory .release
+          -Version "${{ github.ref_name }}"
+
+      - name: Check packaged Lua syntax
+        shell: bash
+        run: |
+          unzip -q ".release/BetterLoot-${GITHUB_REF_NAME}.zip" \
+            -d /tmp/betterloot-package
+          test -f /tmp/betterloot-package/BetterLoot/Media/BetterLoot.png
+          luac5.1 -p /tmp/betterloot-package/BetterLoot/*.lua
+
+  publish:
+    needs: validate
+    runs-on: ubuntu-latest
+    env:
+      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Check out validated tagged source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Publish GitHub and CurseForge release
+        uses: BigWigsMods/packager@v2

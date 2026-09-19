@@ -1,0 +1,9 @@
+package-as: BetterLoot
+
+ignore:
+  - .github
+  - .gitignore
+  - .pkgmeta
+  - .release
+  - Tests
+  - README.md
