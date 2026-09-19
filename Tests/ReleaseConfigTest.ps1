@@ -19,6 +19,7 @@ $toc = Get-Content -Raw 'BetterLoot.toc'
 $packageMeta = Get-Content -Raw '.pkgmeta'
 $workflow = Get-Content -Raw '.github/workflows/release.yml'
 $gitIgnore = Get-Content -Raw '.gitignore'
+$changelog = Get-Content -Raw 'CHANGELOG.md'
 
 # When
 $requiredTocValues = @(
@@ -28,11 +29,15 @@ $requiredTocValues = @(
 )
 $requiredPackageMetaValues = @(
     'package-as: BetterLoot',
+    'manual-changelog:',
+    '  filename: CHANGELOG.md',
+    '  markup-type: markdown',
     '  - .github',
     '  - .gitignore',
     '  - .pkgmeta',
     '  - .release',
     '  - Tests',
+    '  - CHANGELOG.md',
     '  - README.md'
 )
 $requiredWorkflowValues = @(
@@ -60,5 +65,6 @@ foreach ($value in $requiredWorkflowValues) {
 }
 
 Assert-Contains $gitIgnore '.release/' 'Local release output must be ignored'
+Assert-Contains $changelog '## v0.1.0' 'Initial release notes are missing'
 
 Write-Output 'PASS: release configuration contract'

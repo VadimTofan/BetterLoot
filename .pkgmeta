@@ -1,9 +1,14 @@
 package-as: BetterLoot
 
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
+
 ignore:
   - .github
   - .gitignore
   - .pkgmeta
   - .release
   - Tests
+  - CHANGELOG.md
   - README.md
